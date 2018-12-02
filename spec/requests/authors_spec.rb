@@ -19,7 +19,6 @@ RSpec.describe 'Authors API', type: :request do
 
       it 'returns the full list of authors' do
         expect(response).to have_http_status(200)
-        expect(JSON.parse(response.body)).not_to be_empty
         expect(JSON.parse(response.body).size).to eq(5)
       end
     end
@@ -34,7 +33,6 @@ RSpec.describe 'Authors API', type: :request do
     context 'when the author exists' do
       it 'returns the author' do
         expect(response).to have_http_status(200)
-        expect(JSON.parse(response.body)).not_to be_empty
         expect(JSON.parse(response.body)['id']).to eq(author_id)
       end
     end
@@ -45,6 +43,26 @@ RSpec.describe 'Authors API', type: :request do
       it 'returns status code 404 and an error message' do
         expect(response).to have_http_status(404)
         expect(response.body).to match(/Couldn't find Author with 'id'=#{author_id}/)
+      end
+    end
+  end
+
+  describe 'POST /authors' do
+    context 'when the request is valid' do
+      it 'returns the id of the new author' do
+        post "/authors", params: {:name => "George Orwell"}
+
+        expect(response).to have_http_status(201)
+        expect(JSON.parse(response.body)['id']).to be_an(Integer)
+      end
+    end
+
+    context 'when the request is invalid' do
+      it 'returns status code 400 and an error message' do
+        post "/authors", params: {}
+
+        expect(response).to have_http_status(400)
+        expect(response.body).to match(/Validation failed: Name can't be blank/)
       end
     end
   end

@@ -1,6 +1,11 @@
 class AuthorsController < ActionController::API
   include ExceptionHandler
 
+  def create
+    author = Author.create!(params.permit(:name))
+    render json: {:id => author.id}, status: :created
+  end
+
   def index
     authors = Author.all
     render json: authors, status: :ok
