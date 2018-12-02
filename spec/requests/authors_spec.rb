@@ -24,4 +24,28 @@ RSpec.describe 'Authors API', type: :request do
       end
     end
   end
+
+  describe 'GET /authors/:id' do
+    let!(:authors) { create_list(:author, 1) }
+    let(:author_id) { authors.first.id }
+
+    before { get "/authors/#{author_id}" }
+
+    context 'when the author exists' do
+      it 'returns the author' do
+        expect(response).to have_http_status(200)
+        expect(JSON.parse(response.body)).not_to be_empty
+        expect(JSON.parse(response.body)['id']).to eq(author_id)
+      end
+    end
+
+    context 'when the author does not exist' do
+      let(:author_id) { 100 }
+
+      it 'returns status code 404 and an error message' do
+        expect(response).to have_http_status(404)
+        expect(response.body).to match(/Couldn't find Author with 'id'=#{author_id}/)
+      end
+    end
+  end
 end
