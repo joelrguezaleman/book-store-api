@@ -84,4 +84,28 @@ RSpec.describe 'Authors API', type: :request do
       end
     end
   end
+
+  describe 'DELETE /authors/:id' do
+    context 'when the record exists' do
+      it 'returns status code 204' do
+        delete "/authors/#{author_id}"
+
+        expect(response).to have_http_status(204)
+        expect(response.body).to be_empty
+
+        get "/authors/#{author_id}"
+
+        expect(response).to have_http_status(404)
+      end
+    end
+
+    context 'when the record does not exist' do
+      it 'returns status code 404' do
+        delete "/authors/#{unknown_author_id}"
+
+        expect(response).to have_http_status(404)
+        expect(response.body).to match(/Couldn't find Author with 'id'=#{unknown_author_id}/)
+      end
+    end
+  end
 end
