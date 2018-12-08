@@ -44,6 +44,10 @@ RSpec.describe 'Authors API', type: :request do
         expect(response).to have_http_status(201)
         expect(JSON.parse(response.body)['id']).to be_an(Integer)
         expect(JSON.parse(response.body)['url']).to eq('/authors/6')
+
+        get "/authors/6"
+
+        expect(JSON.parse(response.body)['name']).to eq("George Orwell")
       end
     end
 
