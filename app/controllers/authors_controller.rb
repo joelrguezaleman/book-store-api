@@ -18,8 +18,7 @@ class AuthorsController < ActionController::API
   end
 
   def index
-    authors = Author.all
-    render json: authors
+    render json: Author.all
   end
 
   def show

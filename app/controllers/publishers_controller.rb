@@ -18,8 +18,7 @@ class PublishersController < ActionController::API
   end
 
   def index
-    publishers = Publisher.all
-    render json: publishers
+    render json: Publisher.all
   end
 
   def show

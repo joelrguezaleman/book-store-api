@@ -18,8 +18,7 @@ class GenresController < ActionController::API
   end
 
   def index
-    genres = Genre.all
-    render json: genres
+    render json: Genre.all
   end
 
   def show
